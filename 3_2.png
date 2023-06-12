@@ -1,0 +1,63 @@
+package com.example.lab3;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.content.Intent;
+import android.view.View;
+import android.widget.Toast;
+
+public class SignIn extends AppCompatActivity {
+    EditText username, password;
+//    String prevUsername, prevPassword;
+    Button sign;
+    int attempts = 0;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.signin);
+        username = findViewById(R.id.username);
+        password = findViewById(R.id.password);
+        sign = findViewById(R.id.sign);
+    }
+
+//    void setUsernameAndPasswordFromIntent() {
+//        Bundle b = getIntent().getExtras();
+//        prevUsername = b.getString("username");
+//        prevPassword = b.getString("password");
+//    }
+
+    public void signinhandler (View v) {
+//        setUsernameAndPasswordFromIntent();
+        Bundle b = getIntent().getExtras();
+        String prevUsername = b.getString("username");
+        String prevPassword = b.getString("password");
+        String u = username.getText().toString(), p = password.getText().toString();
+        if(u.equals(prevUsername) && p.equals(prevPassword)) {
+            makeToast(v, true);
+            Intent i = new Intent(this, success.class);
+            startActivity(i);
+        }
+        else {
+            makeToast(v, false);
+            attempts++;
+            if(attempts == 3) {
+                sign.setEnabled(false);
+            }
+
+        }
+    }
+
+    void makeToast (View v, boolean type) {
+        if(type) {
+            Toast.makeText(this, "Sign in success!", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(this, "Username or password is wrong", Toast.LENGTH_LONG).show();
+        }
+    }
+
+}
